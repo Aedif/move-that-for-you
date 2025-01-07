@@ -11,10 +11,7 @@ function libWrapControlMethods(type, layer) {
       if (this.document.canUserModify(user, 'update')) {
         return result;
       } else {
-        return (
-          !game.paused &&
-          (this.document.getFlag(MODULE_ID, 'allowPlayerMove') || canvas.scene?.getFlag(MODULE_ID, 'allowPlayerMove'))
-        );
+        return !game.paused && this.document.allowPlayerMove();
       }
     },
     'WRAPPER'
@@ -26,13 +23,7 @@ function libWrapControlMethods(type, layer) {
     function (wrapped, ...args) {
       let result = wrapped(...args);
       if (result) return result;
-      return (
-        !game.paused &&
-        (this.document.getFlag(MODULE_ID, 'allowPlayerMove') ||
-          this.document.getFlag(MODULE_ID, 'allowPlayerRotate') ||
-          canvas.scene?.getFlag(MODULE_ID, 'allowPlayerMove') ||
-          canvas.scene?.getFlag(MODULE_ID, 'allowPlayerRotate'))
-      );
+      return !game.paused && (this.document.allowPlayerMove() || this.document.allowPlayerRotate());
     },
     'WRAPPER'
   );
@@ -53,13 +44,7 @@ function libWrapControlMethods(type, layer) {
       function (wrapped, ...args) {
         let result = wrapped(...args);
         if (result) return result;
-        return (
-          !game.paused &&
-          (this.document.getFlag(MODULE_ID, 'allowPlayerMove') ||
-            this.document.getFlag(MODULE_ID, 'allowPlayerRotate') ||
-            canvas.scene?.getFlag(MODULE_ID, 'allowPlayerMove') ||
-            canvas.scene?.getFlag(MODULE_ID, 'allowPlayerRotate'))
-        );
+        return !game.paused && (this.document.allowPlayerMove() || this.document.allowPlayerRotate());
       },
       'WRAPPER'
     );
@@ -78,12 +63,12 @@ function registerUpdateHook(type) {
     if (game.user.id === userId && !doc.canUserModify(game.user, 'update')) {
       let update = {};
 
-      if (doc.getFlag(MODULE_ID, 'allowPlayerMove') || doc.parent.getFlag(MODULE_ID, 'allowPlayerMove')) {
+      if (doc.allowPlayerMove()) {
         if ('x' in data) update.x = data.x;
         if ('y' in data) update.y = data.y;
       }
 
-      if (doc.getFlag(MODULE_ID, 'allowPlayerRotate') || doc.parent.getFlag(MODULE_ID, 'allowPlayerRotate')) {
+      if (doc.allowPlayerRotate()) {
         if ('rotation' in data) update.rotation = data.rotation;
       }
 
@@ -124,7 +109,7 @@ function registerUpdateHook(type) {
       if (boundCheckPassed) {
         const message = {
           handlerName: type,
-          args: { doc, data: update, options, sceneId: canvas.scene.id },
+          args: { doc, data: update, options, sceneId: doc.parent.id },
           type: 'UPDATE',
         };
         game.socket?.emit(`module.${MODULE_ID}`, message);

@@ -1,3 +1,7 @@
+# 2.1.1
+
+- TileDocument/s have been added methods `allowPlayerMove()` and `allowPlayerRotate()` to check player permissions
+
 # 2.1.0
 
 - Added Tile layer controls to allow scene-wide toggling of move and rotate permissions for players
