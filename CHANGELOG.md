@@ -1,6 +1,10 @@
+# 2.1.0
+
+- Added Tile layer controls to allow scene-wide toggling of move and rotate permissions for players
+
 # 2.0.1
 
-- Players will no longer be able to resize tiles
+- Fixed Tile resize handle being interactable for players
 
 # 2.0.0
 

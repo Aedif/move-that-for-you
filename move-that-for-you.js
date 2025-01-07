@@ -113,8 +113,37 @@ Hooks.once('canvasReady', () => {
   setupControls();
 });
 
-// Hide core tile tools for players, only keeping "select";
 Hooks.on('getSceneControlButtons', (controls) => {
+  // Add scene-wide toggles for the GM
+  for (const control of controls) {
+    if (control.name === 'tiles') {
+      control.tools.push({
+        name: 'mtfyMove',
+        title: game.i18n.localize(`${MODULE_ID}.scene.move`),
+        icon: 'fas fa-people-carry',
+        visible: game.user.isGM,
+        active: canvas.scene?.getFlag(MODULE_ID, 'allowPlayerMove'),
+        toggle: true,
+        onClick: () => {
+          canvas.scene?.setFlag(MODULE_ID, 'allowPlayerMove', !canvas.scene.getFlag(MODULE_ID, 'allowPlayerMove'));
+        },
+      });
+      control.tools.push({
+        name: 'mtfyRotate',
+        title: game.i18n.localize(`${MODULE_ID}.scene.rotate`),
+        icon: 'fas fa-sync fa-lg',
+        visible: game.user.isGM,
+        active: canvas.scene?.getFlag(MODULE_ID, 'allowPlayerRotate'),
+        toggle: true,
+        onClick: () => {
+          canvas.scene?.setFlag(MODULE_ID, 'allowPlayerRotate', !canvas.scene.getFlag(MODULE_ID, 'allowPlayerRotate'));
+        },
+      });
+      break;
+    }
+  }
+
+  // Hide core tile tools for players, only keeping "select";
   if (game.user.isGM || !game.settings.get(MODULE_ID, 'enableTileControls')) return;
 
   for (let i = 0; i < controls.length; i++) {

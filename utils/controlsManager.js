@@ -11,7 +11,10 @@ function libWrapControlMethods(type, layer) {
       if (this.document.canUserModify(user, 'update')) {
         return result;
       } else {
-        return !game.paused && this.document.getFlag(MODULE_ID, 'allowPlayerMove');
+        return (
+          !game.paused &&
+          (this.document.getFlag(MODULE_ID, 'allowPlayerMove') || canvas.scene?.getFlag(MODULE_ID, 'allowPlayerMove'))
+        );
       }
     },
     'WRAPPER'
@@ -25,7 +28,10 @@ function libWrapControlMethods(type, layer) {
       if (result) return result;
       return (
         !game.paused &&
-        (this.document.getFlag(MODULE_ID, 'allowPlayerMove') || this.document.getFlag(MODULE_ID, 'allowPlayerRotate'))
+        (this.document.getFlag(MODULE_ID, 'allowPlayerMove') ||
+          this.document.getFlag(MODULE_ID, 'allowPlayerRotate') ||
+          canvas.scene?.getFlag(MODULE_ID, 'allowPlayerMove') ||
+          canvas.scene?.getFlag(MODULE_ID, 'allowPlayerRotate'))
       );
     },
     'WRAPPER'
@@ -49,7 +55,10 @@ function libWrapControlMethods(type, layer) {
         if (result) return result;
         return (
           !game.paused &&
-          (this.document.getFlag(MODULE_ID, 'allowPlayerMove') || this.document.getFlag(MODULE_ID, 'allowPlayerRotate'))
+          (this.document.getFlag(MODULE_ID, 'allowPlayerMove') ||
+            this.document.getFlag(MODULE_ID, 'allowPlayerRotate') ||
+            canvas.scene?.getFlag(MODULE_ID, 'allowPlayerMove') ||
+            canvas.scene?.getFlag(MODULE_ID, 'allowPlayerRotate'))
         );
       },
       'WRAPPER'
@@ -69,12 +78,12 @@ function registerUpdateHook(type) {
     if (game.user.id === userId && !doc.canUserModify(game.user, 'update')) {
       let update = {};
 
-      if (doc.flags?.[MODULE_ID]?.allowPlayerMove) {
+      if (doc.getFlag(MODULE_ID, 'allowPlayerMove') || doc.parent.getFlag(MODULE_ID, 'allowPlayerMove')) {
         if ('x' in data) update.x = data.x;
         if ('y' in data) update.y = data.y;
       }
 
-      if (doc.flags?.[MODULE_ID]?.allowPlayerRotate) {
+      if (doc.getFlag(MODULE_ID, 'allowPlayerRotate') || doc.parent.getFlag(MODULE_ID, 'allowPlayerRotate')) {
         if ('rotation' in data) update.rotation = data.rotation;
       }
 
@@ -85,7 +94,7 @@ function registerUpdateHook(type) {
       // If it's a position update we need to check if it's within the defined bounds for this scene
       let boundCheckPassed = false;
       if ('x' in data || 'y' in data) {
-        const canvasBounds = canvas.scene.getFlag(MODULE_ID, 'bounds') || [];
+        const canvasBounds = doc.parent.getFlag(MODULE_ID, 'bounds') || [];
         if (canvasBounds.length) {
           const x = 'x' in data ? data.x : doc.x;
           const y = 'y' in data ? data.y : doc.y;

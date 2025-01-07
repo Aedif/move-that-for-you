@@ -1,5 +1,9 @@
 {
   "move-that-for-you": {
+    "scene": {
+      "move": "Move That For You: Scene Toggle [Move]",
+      "rotate": "Move That For You: Scene Toggle [Rotate]"
+    },
     "control-title": "Allow players to move this tile",
     "tile-config": {
       "move": {
