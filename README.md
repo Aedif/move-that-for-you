@@ -28,6 +28,8 @@ Movement can also be restricted to boundaries you can draw by either going to mo
 
 Move and Rotate permissions can also be toggled scene-wide using Tile Layer controls:
 
+![image](https://github.com/user-attachments/assets/99ff1e22-bba3-4350-bdc9-8fa02ebd56f9)
+
 ## Insert Permission Button to HUD
 
 This setting which is enabled by default will insert the above mentioned button to Tile/Token HUDs. However you may choose to disable this and control `move` and `rotate` permissions via flags instead:
