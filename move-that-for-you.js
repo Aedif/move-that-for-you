@@ -80,13 +80,19 @@ Hooks.once('init', () => {
     precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL,
   });
 
-  // Patch helper functions to check if Tiles can be moved or rotated by players
-  TileDocument.prototype.allowPlayerMove = function () {
+  // Patch helper functions to check if Tiles/Tokens can be moved or rotated by players
+  const allowPlayerMove = function () {
     return this.getFlag(MODULE_ID, 'allowPlayerMove') || this.parent.getFlag(MODULE_ID, 'allowPlayerMove');
   };
-  TileDocument.prototype.allowPlayerRotate = function () {
+
+  const allowPlayerRotate = function () {
     return this.getFlag(MODULE_ID, 'allowPlayerRotate') || this.parent.getFlag(MODULE_ID, 'allowPlayerRotate');
   };
+
+  TileDocument.prototype.allowPlayerMove = allowPlayerMove;
+  TileDocument.prototype.allowPlayerRotate = allowPlayerRotate;
+  TokenDocument.prototype.allowPlayerMove = allowPlayerMove;
+  TokenDocument.prototype.allowPlayerRotate = allowPlayerRotate;
 
   // Disable Tile resize handle for user who don't have Tile update permissions
   libWrapper.register(

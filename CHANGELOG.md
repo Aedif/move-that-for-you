@@ -1,3 +1,7 @@
+# 2.1.2
+
+- Token permission fix
+
 # 2.1.1
 
 - TileDocument/s have been added methods `allowPlayerMove()` and `allowPlayerRotate()` to check player permissions
