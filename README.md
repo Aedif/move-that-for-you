@@ -24,6 +24,10 @@ Movement can also be restricted to boundaries you can draw by either going to mo
 
 ![Bounding Box](https://user-images.githubusercontent.com/7693704/200052370-2d1ff976-be8e-417e-8c30-5bf1a36199f1.png)
 
+## Tile Layer Controls
+
+Move and Rotate permissions can also be toggled scene-wide using Tile Layer controls:
+
 ## Insert Permission Button to HUD
 
 This setting which is enabled by default will insert the above mentioned button to Tile/Token HUDs. However you may choose to disable this and control `move` and `rotate` permissions via flags instead:
@@ -31,9 +35,7 @@ This setting which is enabled by default will insert the above mentioned button 
 Toggle `move` permissions for currently selected Tile/Tokens:
 
 ```js
-const controlled = canvas.tiles.controlled.length
-  ? canvas.tiles.controlled
-  : canvas.tokens.controlled;
+const controlled = canvas.tiles.controlled.length ? canvas.tiles.controlled : canvas.tokens.controlled;
 
 for (const placeable of controlled) {
   const allowMove = Boolean(placeable.document.getFlag('move-that-for-you', 'allowPlayerMove'));
@@ -45,9 +47,7 @@ for (const placeable of controlled) {
 Toggle `rotate` permissions for currently selected Tile/Tokens:
 
 ```js
-const controlled = canvas.tiles.controlled.length
-  ? canvas.tiles.controlled
-  : canvas.tokens.controlled;
+const controlled = canvas.tiles.controlled.length ? canvas.tiles.controlled : canvas.tokens.controlled;
 
 for (const placeable of controlled) {
   const allowRotate = Boolean(placeable.document.getFlag('move-that-for-you', 'allowPlayerRotate'));
