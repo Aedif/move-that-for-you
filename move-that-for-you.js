@@ -179,7 +179,6 @@ Hooks.on('getSceneControlButtons', (controls) => {
 /*
  * If Mass Edit is active, add checkboxes to the config forms
  */
-
 Hooks.once('ready', () => {
   if (!game.user.isGM || !game.modules.get('multi-token-edit')?.active) return;
 
@@ -188,37 +187,42 @@ Hooks.once('ready', () => {
   if (game.settings.get(MODULE_ID, 'enableTokenControls')) forms.push('Token');
 
   forms.forEach((type) => {
-    Hooks.on(`render${type}Config`, (app, html, data) => {
+    Hooks.on(`render${type}Config`, async (app, html, data) => {
       const isInjected = html.find(`input[name="flags.${MODULE_ID}.allowPlayerMove"]`).length > 0;
       if (isInjected) return;
 
       const allowMove = app.object.getFlag(MODULE_ID, 'allowPlayerMove');
       const allowRotate = app.object.getFlag(MODULE_ID, 'allowPlayerRotate');
 
-      const newHtml = `
-    <div class="form-group">
-      <label>${game.i18n.localize(`${MODULE_ID}.tile-config.move.label`)}</label>
-      <div class="form-fields">
-          <input type="checkbox" name="flags.${MODULE_ID}.allowPlayerMove" ${allowMove ? 'checked' : ''}>
-      </div>
-      <p class="notes">${game.i18n.localize(`${MODULE_ID}.tile-config.move.note`)}</p>
-    </div>
-  
-    <div class="form-group">
-      <label>${game.i18n.localize(`${MODULE_ID}.tile-config.rotate.label`)}</label>
-      <div class="form-fields">
-          <input type="checkbox" name="flags.${MODULE_ID}.allowPlayerRotate" ${allowRotate ? 'checked' : ''}>
-      </div>
-      <p class="notes">${game.i18n.localize(`${MODULE_ID}.tile-config.rotate.note`)}</p>
-    </div>
-  `;
+      const flagHtml = await renderTemplate(`modules/${MODULE_ID}/templates/flagConfig.html`, {
+        allowMove,
+        allowRotate,
+        MODULE_ID,
+      });
 
-      if (type === 'Token') {
-        html.find(`select[name="disposition"]`).closest('.form-group').after(newHtml);
-      } else {
-        html.find(`input[name="texture.tint"]`).closest('.form-group').after(newHtml);
-      }
+      if (type === 'Token') html.find(`[name="disposition"]`).closest('.form-group').after(flagHtml);
+      else html.find(`[name="texture.tint"]`).closest('.form-group').after(flagHtml);
+
       app.setPosition({ height: 'auto' });
     });
+  });
+
+  // Mass Edit Bag support
+  Hooks.on('renderBagConfig', async (bagConfig, html, options) => {
+    const isInjected = html.find(`input[name="flags.${MODULE_ID}.allowPlayerMove"]`).length > 0;
+    if (isInjected) return;
+
+    const allowMove = foundry.utils.getProperty(bagConfig.preset.data[0], `flags.${MODULE_ID}.allowPlayerMove`);
+    const allowRotate = foundry.utils.getProperty(bagConfig.preset.data[0], `flags.${MODULE_ID}.allowPlayerRotate`);
+
+    const flagHtml = await renderTemplate(`modules/${MODULE_ID}/templates/flagConfig.html`, {
+      allowMove,
+      allowRotate,
+      MODULE_ID,
+      spawnNote: true,
+    });
+
+    html.find('[name="searchBar"]').closest('.form-group').after(flagHtml);
+    bagConfig.setPosition({ height: 'auto' });
   });
 });

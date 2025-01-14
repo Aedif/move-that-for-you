@@ -1,0 +1,26 @@
+<fieldset>
+    <legend>Move That For You</legend>
+    <div class="form-group">
+        <label>{{localize "move-that-for-you.config.move.label"}}</label>
+        <div class="form-fields">
+            <input type="checkbox" name="flags.{{MODULE_ID}}.allowPlayerMove" {{checked allowMove}}>
+        </div>
+        {{#if spawnNote}}
+        <p class="notes">{{localize "move-that-for-you.config.move.spawnNote"}}</p>
+        {{else}}
+        <p class="notes">{{localize "move-that-for-you.config.move.note"}}</p>
+        {{/if}}
+      </div>
+    
+      <div class="form-group">
+        <label>{{localize "move-that-for-you.config.rotate.label"}}</label>
+        <div class="form-fields">
+            <input type="checkbox" name="flags.{{MODULE_ID}}.allowPlayerRotate" {{checked allowRotate}}>
+        </div>
+        {{#if spawnNote}}
+        <p class="notes">{{localize "move-that-for-you.config.rotate.spawnNote"}}</p>
+        {{else}}
+        <p class="notes">{{localize "move-that-for-you.config.rotate.note"}}</p>
+        {{/if}}
+      </div>
+</fieldset>

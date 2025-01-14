@@ -1,3 +1,9 @@
+# 2.2.0
+
+- Tiles without player permissions will not be highlighted or interfere with selecting tiles with permissions
+- Added Move/Rotate permission flags to the Mass Edit Bag configuration window
+  - Allows any spawned tiles/tokens to be automatically granted player permissions
+
 # 2.1.2
 
 - Token permission fix

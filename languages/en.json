@@ -5,14 +5,16 @@
       "rotate": "Move That For You: Scene Toggle [Rotate]"
     },
     "control-title": "Allow players to move this tile",
-    "tile-config": {
+    "config": {
       "move": {
-        "label": "Player Move",
-        "note": "Allow players to move the tile"
+        "label": "Move",
+        "note": "Allow players to move this placeable",
+        "spawnNote": "Allow players to move spawned tiles/tokens."
       },
       "rotate": {
-        "label": "Player Rotate",
-        "note": "Allow players to rotate the tile"
+        "label": "Rotate",
+        "note": "Allow players to rotate this placeable",
+        "spawnNote": "Allow players to rotate spawned tiles/tokens."
       }
     },
     "app": {

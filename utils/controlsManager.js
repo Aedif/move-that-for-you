@@ -44,7 +44,21 @@ function libWrapControlMethods(type, layer) {
       function (wrapped, ...args) {
         let result = wrapped(...args);
         if (result) return result;
-        return !game.paused && (this.document.allowPlayerMove() || this.document.allowPlayerRotate());
+        return this.document.allowPlayerMove() || this.document.allowPlayerRotate();
+      },
+      'WRAPPER'
+    );
+
+    libWrapper.register(
+      MODULE_ID,
+      `${type}.prototype._refreshState`,
+      function (wrapped, ...args) {
+        let result = wrapped(...args);
+        // Tiles without permission should not be interactive
+        const canHover = this._canHover(game.user);
+        this.eventMode = canHover ? 'static' : 'none';
+        this.frame.border.visible = this.controlled || this.hover || (canHover && this.layer.highlightObjects);
+        return result;
       },
       'WRAPPER'
     );
