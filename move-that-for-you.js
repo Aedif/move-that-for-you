@@ -97,7 +97,7 @@ Hooks.once('init', () => {
   // Disable Tile resize handle for user who don't have Tile update permissions
   libWrapper.register(
     MODULE_ID,
-    `Tile.prototype._draw`,
+    `foundry.canvas.placeables.Tile.prototype._draw`,
     async function (wrapped, ...args) {
       let result = await wrapped(...args);
       if (!this.document.canUserModify(game.user, 'update')) {
@@ -128,52 +128,39 @@ Hooks.once('canvasReady', () => {
 });
 
 Hooks.on('getSceneControlButtons', (controls) => {
-  // Add scene-wide toggles for the GM
-  for (const control of controls) {
-    if (control.name === 'tiles') {
-      control.tools.push({
-        name: 'mtfyMove',
-        title: game.i18n.localize(`${MODULE_ID}.scene.move`),
-        icon: 'fas fa-people-carry',
-        visible: game.user.isGM,
-        active: canvas.scene?.getFlag(MODULE_ID, 'allowPlayerMove'),
-        toggle: true,
-        onClick: () => {
-          canvas.scene?.setFlag(MODULE_ID, 'allowPlayerMove', !canvas.scene.getFlag(MODULE_ID, 'allowPlayerMove'));
-        },
-      });
-      control.tools.push({
-        name: 'mtfyRotate',
-        title: game.i18n.localize(`${MODULE_ID}.scene.rotate`),
-        icon: 'fas fa-sync fa-lg',
-        visible: game.user.isGM,
-        active: canvas.scene?.getFlag(MODULE_ID, 'allowPlayerRotate'),
-        toggle: true,
-        onClick: () => {
-          canvas.scene?.setFlag(MODULE_ID, 'allowPlayerRotate', !canvas.scene.getFlag(MODULE_ID, 'allowPlayerRotate'));
-        },
-      });
-      break;
-    }
-  }
+  // // Add scene-wide toggles for the GM
+  controls.tiles.tools.mtfyMove = {
+    name: 'mtfyMove',
+    title: game.i18n.localize(`${MODULE_ID}.scene.move`),
+    icon: 'fas fa-people-carry',
+    visible: game.user.isGM,
+    active: canvas.scene?.getFlag(MODULE_ID, 'allowPlayerMove'),
+    toggle: true,
+    onChange: () => {
+      canvas.scene?.setFlag(MODULE_ID, 'allowPlayerMove', !canvas.scene.getFlag(MODULE_ID, 'allowPlayerMove'));
+    },
+  };
+
+  controls.tiles.tools.mtfyRotate = {
+    name: 'mtfyRotate',
+    title: game.i18n.localize(`${MODULE_ID}.scene.rotate`),
+    icon: 'fas fa-sync fa-lg',
+    visible: game.user.isGM,
+    active: canvas.scene?.getFlag(MODULE_ID, 'allowPlayerRotate'),
+    toggle: true,
+    onChange: () => {
+      canvas.scene?.setFlag(MODULE_ID, 'allowPlayerRotate', !canvas.scene.getFlag(MODULE_ID, 'allowPlayerRotate'));
+    },
+  };
 
   // Hide core tile tools for players, only keeping "select";
   if (game.user.isGM || !game.settings.get(MODULE_ID, 'enableTileControls')) return;
 
-  for (let i = 0; i < controls.length; i++) {
-    if (controls[i].name === 'tiles') {
-      controls[i].visible = true;
-
-      const coreTools = ['tile', 'browse', 'foreground'];
-      controls[i].tools.forEach((t) => {
-        if (coreTools.includes(t.name)) {
-          t.visible = false;
-        }
-      });
-
-      return;
-    }
-  }
+  controls.tiles.visible = true;
+  // 'foreground'
+  ['tile', 'browse'].forEach((tool) => {
+    controls.tiles.tools[tool].visible = false;
+  });
 });
 
 /*

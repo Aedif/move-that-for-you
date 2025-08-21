@@ -8,25 +8,20 @@ export function registerHUD() {
 function registerHUDButton(type) {
   // Add additional controls for GMs
   Hooks.on(`render${type}HUD`, (hud, form, options) => {
-    if (
-      !game.settings.get(MODULE_ID, 'enableHUDButtons') ||
-      !game.settings.get(MODULE_ID, `enable${type}Controls`)
-    )
+    if (!game.settings.get(MODULE_ID, 'enableHUDButtons') || !game.settings.get(MODULE_ID, `enable${type}Controls`))
       return;
 
     // Create the controls
     const playerMoveControl = $(`
-    <div class="control-icon " data-action="playerMove">
+    <button class="control-icon " data-action="playerMove">
       <div>
-        <i title="${game.i18n.format(
-          'move-that-for-you.control-title'
-        )}" class="fas fa-people-carry"></i>
+        <i title="${game.i18n.format('move-that-for-you.control-title')}" class="fas fa-people-carry"></i>
         <i class="allowRotate fas fa-sync fa-lg"></i>
       </div>
-    </div>
+    </button>
     `);
     const rotateControl = playerMoveControl.find('.allowRotate');
-    form.find('div.col.right').last().append(playerMoveControl);
+    $(form).find('div.col.right').last().append(playerMoveControl);
 
     const doc = hud.object.document;
 

@@ -1,3 +1,7 @@
+# 3.0.0
+
+- v13 support
+
 # 2.2.0
 
 - Tiles without player permissions will not be highlighted or interfere with selecting tiles with permissions

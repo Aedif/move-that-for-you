@@ -5,7 +5,7 @@ function libWrapControlMethods(type, layer) {
 
   libWrapper.register(
     MODULE_ID,
-    `${type}.prototype._canDrag`,
+    `foundry.canvas.placeables.${type}.prototype._canDrag`,
     function (wrapped, user, event) {
       let result = wrapped(user, event);
       if (this.document.canUserModify(user, 'update')) {
@@ -19,7 +19,7 @@ function libWrapControlMethods(type, layer) {
 
   libWrapper.register(
     MODULE_ID,
-    `${type}.prototype._canControl`,
+    `foundry.canvas.placeables.${type}.prototype._canControl`,
     function (wrapped, ...args) {
       let result = wrapped(...args);
       if (result) return result;
@@ -31,7 +31,7 @@ function libWrapControlMethods(type, layer) {
   if (type === 'Tile') {
     libWrapper.register(
       MODULE_ID,
-      `${type}.prototype._canHUD`,
+      `foundry.canvas.placeables.${type}.prototype._canHUD`,
       function () {
         return false;
       },
@@ -40,7 +40,7 @@ function libWrapControlMethods(type, layer) {
 
     libWrapper.register(
       MODULE_ID,
-      `${type}.prototype._canHover`,
+      `foundry.canvas.placeables.${type}.prototype._canHover`,
       function (wrapped, ...args) {
         let result = wrapped(...args);
         if (result) return result;
@@ -51,7 +51,7 @@ function libWrapControlMethods(type, layer) {
 
     libWrapper.register(
       MODULE_ID,
-      `${type}.prototype._refreshState`,
+      `foundry.canvas.placeables.${type}.prototype._refreshState`,
       function (wrapped, ...args) {
         let result = wrapped(...args);
         // Tiles without permission should not be interactive
@@ -137,7 +137,6 @@ function registerUpdateHook(type) {
 export function setupControls() {
   if (game.settings.get(MODULE_ID, 'enableTileControls')) {
     libWrapControlMethods('Tile', canvas.tiles);
-
     registerUpdateHook('Tile');
   }
 
