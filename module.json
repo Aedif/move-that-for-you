@@ -2,8 +2,8 @@
   "id": "move-that-for-you",
   "title": "Move That for You",
   "description": "Allow players to move tiles.",
-  "version": "3.0.0",
-  "download": "https://github.com/Aedif/move-that-for-you/releases/download/3.0.0/move-that-for-you.zip",
+  "version": "4.0.0",
+  "download": "https://github.com/Aedif/move-that-for-you/releases/download/4.0.0/move-that-for-you.zip",
   "url": "https://github.com/Aedif/move-that-for-you",
   "manifest": "https://raw.githubusercontent.com/Aedif/move-that-for-you/master/module.json",
   "author": "Aedif",
@@ -15,8 +15,8 @@
     }
   ],
   "compatibility": {
-    "minimum": 13,
-    "verified": "13"
+    "minimum": 14,
+    "verified": "14"
   },
   "esmodules": ["move-that-for-you.js"],
   "scripts": [],
@@ -28,6 +28,11 @@
       "path": "languages/en.json"
     }
   ],
+  "documentTypes": {
+    "RegionBehavior": {
+      "restrict": {}
+    }
+  },
   "relationships": {
     "requires": [
       {
